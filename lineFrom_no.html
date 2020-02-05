@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+    <style>
+      body{
+        font-family: 'Noto Sans TC', sans-serif;
+      }
+      h1{
+        text-align: center;
+      }
+      input[type='number']{
+        width: 40px;
+      }
+    </style>
+    <script>
+      $(document).ready(function(){
+        $('input[type="checkbox"]').change(function(){
+          //取消選取的項目禁止填寫訂購數量,並清空值
+          let chg=$(this).val();
+          $('#'+chg).attr('disabled','disabled');
+          $('#'+chg).val(0);
+          //選取的項目可填寫訂購數量
+          $('input[type="checkbox"]:checked').each(function(idx,elem){
+            let slc=elem.value;
+            $('#'+slc).removeAttr('disabled');
+          });
+          
+        });
+        
+
+        $('#submit').on('click',function(){
+
+        
+
+          var name=$('#name').val();
+          var gend=$('input[name="gend"]:checked').val();
+          var type="";
+            $('input[type="checkbox"]:checked').each(function(idx,elem){
+                  type+=elem.value;
+            });
+          var stPie=$('#草莓檸檬派-150').val();
+          var barMac=$('#覆盆子馬卡龍-30').val();
+          var colTow=$('#生巧克力塔-100').val();
+          var milkTos=$('#牛奶糖吐司-80').val();
+          var bmCny=$('#黑莓法式軟糖-50').val();
+          
+
+         var data={
+          "entry.481114562":name,
+          "entry.1244026395":gend,
+          "entry.2147380118":type,
+          "entry.756990800":stPie,
+          "entry.1339167684":barMac,
+          "entry.1161779808":colTow,
+          "entry.442940098":milkTos,
+          "entry.1821977599":bmCny
+        };
+        $('#P').text(data);
+        if(name!==null&&type!==""){
+          $.ajax({
+              type:"POST",
+              url:"https://docs.google.com/forms/u/0/d/e/1FAIpQLSfwY7UcoXLVSp5SMVKEfmy5VkHJbdem6TvTC5mXTYWafxpJgg/formResponse",
+              data:data,
+              contentType:"application/json",
+              dataType:"jsonp",
+              complete:send()
+              
+            }); 
+
+        }else{
+          alert('有問題');
+        }
+
+        function send(){
+            alert('已送出');
+         }
+
+      })
+        
+
+
+
+
+ 
+
+      })
+    </script>
+</head>
+<body>
+    <div class="container">
+      <div class="row">
+        <div class="col-6"></div>
+        <div class="col-6">
+          <h1>表單</h1>
+          <form>
+            <label for="name">姓名</label><br>
+            <input type="text" id="name" required ><br>
+            
+            <p>性別</p>
+              <input type="radio" name="gend" value="B" id="female"><label for="female">男</label>
+              <input type="radio" name="gend" value="G" id="girl"><label for="girl">女</label><br>
+              
+            <p> 選項</p>
+            <input type="checkbox" value="草莓檸檬派-150"><label for="response">草莓檸檬派</label><input type="number" id="草莓檸檬派-150" max=10 value="0" disabled><br>
+            <input type="checkbox" value="覆盆子馬卡龍-30"><label for="response">覆盆子馬卡龍</label><input type="number" id="覆盆子馬卡龍-30" max=10 value="0" disabled><br>
+            <input type="checkbox" value="生巧克力塔-100"><label for="response">生巧克力塔</label><input type="number" id="生巧克力塔-100" max=10 value="0" disabled><br>
+            <input type="checkbox" value="牛奶糖吐司-80"><label for="response">牛奶糖吐司</label><input type="number" id="牛奶糖吐司-80" max=10 value="0" disabled><br>
+            <input type="checkbox" value="黑莓法式軟糖-50"><label for="response">黑莓法式軟糖</label><input type="number" id="黑莓法式軟糖-50" max=10 value="0" disabled><br>
+
+            <button id="submit">提交</button>
+          </form>
+<div id="P"></div>
+        </div>
+      </div>
+
+    </div>
+   
+</body>
+</html>
